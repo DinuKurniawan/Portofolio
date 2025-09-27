@@ -51,92 +51,91 @@ function initializeStarRatings() {
   });
 }
 // Add click event listeners to stars
-function setupStarInteractions() {
-  document.querySelectorAll(".fa-star").forEach((star) => {
-    star.addEventListener("click", function () {
-      const skill = this.getAttribute("data-skill");
-      const rating = parseInt(this.getAttribute("data-rating"));
+// function setupStarInteractions() {
+//   document.querySelectorAll(".fa-star").forEach((star) => {
+//     star.addEventListener("click", function () {
+//       const skill = this.getAttribute("data-skill");
+//       const rating = parseInt(this.getAttribute("data-rating"));
 
-      starRatings[skill] = rating;
+//       starRatings[skill] = rating;
 
-      // Update all stars for this skill
-      const stars = document.querySelectorAll(`[data-skill="${skill}"]`);
-      stars.forEach((s) => {
-        const starRating = parseInt(s.getAttribute("data-rating"));
-        if (starRating <= rating) {
-          s.classList.add("text-yellow-400");
-          s.classList.remove("text-gray-300");
-        } else {
-          s.classList.add("text-gray-300");
-          s.classList.remove("text-yellow-400");
-        }
-      });
+//       // Update all stars for this skill
+//       const stars = document.querySelectorAll(`[data-skill="${skill}"]`);
+//       stars.forEach((s) => {
+//         const starRating = parseInt(s.getAttribute("data-rating"));
+//         if (starRating <= rating) {
+//           s.classList.add("text-yellow-400");
+//           s.classList.remove("text-gray-300");
+//         } else {
+//           s.classList.add("text-gray-300");
+//           s.classList.remove("text-yellow-400");
+//         }
+//       });
 
-      // Save to localStorage
-      localStorage.setItem("skillRatings", JSON.stringify(starRatings));
+//       // Save to localStorage
+//       localStorage.setItem("skillRatings", JSON.stringify(starRatings));
 
-      // Show feedback
-      showRatingFeedback(skill, rating);
-    });
+//       // Show feedback
+//       showRatingFeedback(skill, rating);
+//     });
 
-    // Hover effect
-    star.addEventListener("mouseenter", function () {
-      const skill = this.getAttribute("data-skill");
-      const rating = parseInt(this.getAttribute("data-rating"));
+//     // Hover effect
+//     star.addEventListener("mouseenter", function () {
+//       const skill = this.getAttribute("data-skill");
+//       const rating = parseInt(this.getAttribute("data-rating"));
 
-      const stars = document.querySelectorAll(`[data-skill="${skill}"]`);
-      stars.forEach((s) => {
-        const starRating = parseInt(s.getAttribute("data-rating"));
-        if (starRating <= rating) {
-          s.classList.add("text-yellow-300");
-        }
-      });
-    });
+//       const stars = document.querySelectorAll(`[data-skill="${skill}"]`);
+//       stars.forEach((s) => {
+//         const starRating = parseInt(s.getAttribute("data-rating"));
+//         if (starRating <= rating) {
+//           s.classList.add("text-yellow-300");
+//         }
+//       });
+//     });
 
-    star.addEventListener("mouseleave", function () {
-      const skill = this.getAttribute("data-skill");
-      const currentRating = starRatings[skill];
+//     star.addEventListener("mouseleave", function () {
+//       const skill = this.getAttribute("data-skill");
+//       const currentRating = starRatings[skill];
 
-      const stars = document.querySelectorAll(`[data-skill="${skill}"]`);
-      stars.forEach((s) => {
-        const starRating = parseInt(s.getAttribute("data-rating"));
-        s.classList.remove("text-yellow-300");
-        if (starRating <= currentRating) {
-          s.classList.add("text-yellow-400");
-        } else {
-          s.classList.add("text-gray-300");
-        }
-      });
-    });
-  });
+//       const stars = document.querySelectorAll(`[data-skill="${skill}"]`);
+//       stars.forEach((s) => {
+//         const starRating = parseInt(s.getAttribute("data-rating"));
+//         s.classList.remove("text-yellow-300");
+//         if (starRating <= currentRating) {
+//           s.classList.add("text-yellow-400");
+//         } else {
+//           s.classList.add("text-gray-300");
+//         }
+//       });
+//     });
+//   });
+// }
+// function showRatingFeedback(skill, rating) {
+//   const skillNames = {
+//     htmlcss: "HTML/CSS",
+//     javascript: "JavaScript",
+//     tailwindcss: "TailwindCSS",
+//     bootstrap: "Bootstrap",
+//     laravel: "Laravel",
+//   };
+
+// Create or update feedback element
+let feedback = document.getElementById("rating-feedback");
+if (!feedback) {
+  feedback = document.createElement("div");
+  feedback.id = "rating-feedback";
+  feedback.className =
+    "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50";
+  document.body.appendChild(feedback);
 }
-function showRatingFeedback(skill, rating) {
-  const skillNames = {
-    htmlcss: "HTML/CSS",
-    javascript: "JavaScript",
-    tailwindcss: "TailwindCSS",
-    bootstrap: "Bootstrap",
-    laravel: "Laravel",
-  };
 
-  // Create or update feedback element
-  let feedback = document.getElementById("rating-feedback");
-  if (!feedback) {
-    feedback = document.createElement("div");
-    feedback.id = "rating-feedback";
-    feedback.className =
-      "fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50";
-    document.body.appendChild(feedback);
-  }
+feedback.textContent = `${skillNames[skill]} rating set to ${rating} stars`;
 
-  feedback.textContent = `${skillNames[skill]} rating set to ${rating} stars`;
-
-  // Remove after 3 seconds
-  setTimeout(() => {
-    feedback.style.opacity = "0";
-    setTimeout(() => feedback.remove(), 300);
-  }, 3000);
-}
+// Remove after 3 seconds
+setTimeout(() => {
+  feedback.style.opacity = "0";
+  setTimeout(() => feedback.remove(), 300);
+}, 3000);
 
 // Load saved ratings from localStorage
 function loadSavedRatings() {
